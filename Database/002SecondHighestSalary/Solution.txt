@@ -1,0 +1,21 @@
+# Write your MySQL query statement below
+select max(Salary) from Employee where Salary < (select max(Salary) from Employee);
+
+#以下可去重
+select (select distinct Salary from Employee order by Salary desc limit 1,1);
+#测试NULLIF
+select NULLIF((select distinct Salary from Employee order by Salary desc limit 1,1),NULL);
+#测试IFNULL
+select IFNULL((select distinct Salary from Employee order by Salary desc limit 1,1),NULL);
+
+#至于运行时间,每次提交运行时间不同,以上这些慢的时候900多ms,快的时候只需要700多ms,不清楚到底那个更快,得用一些大型的数据库测试一下,或者分析原理
+
+# 如果不去重,SQL语句可以这么写:
+SELECT (SELECT Salary AS SecondHighestSalary FROM Employee ORDER BY Salary DESC LIMIT 1,1);
+#嵌套的SELECT可以取代IFNULL函数
+
+# IFNULL(expr1,expr2)
+# 如果 expr1 不是 NULL,IFNULL() 返回 expr1,否则它返回 expr2
+# IFNULL()返回一个数字或字符串值，取决于它被使用的上下文环境
+NULLIF(expr1,expr2)  的用法：  
+如果expr1 = expr2 成立,那么返回值为NULL,否则返回值为expr1
