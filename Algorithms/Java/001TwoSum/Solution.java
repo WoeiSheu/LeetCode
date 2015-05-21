@@ -2,7 +2,7 @@
  * @author Hypocrisy
  * Created by Hypocrisy(许炜) on 5/19/2015.
  */
-import java.util.Scanner;
+import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
@@ -24,16 +24,39 @@ public class Solution {
 
     public int[] twoSum(int[] nums, int target) {
         int[] index = new int[2];
-        //List<int> numsList = Arrays.asList(nums);     //这样写会错,因为Arrays.asList的参数是一个对象类型数组,而int是个基本类型,不可用,若是Integer即可
+        HashMap<Integer,Integer> hashNums = new HashMap<Integer, Integer>();
         int len = nums.length;
-        for(int iCount = 0; iCount < len-1; iCount++) {
-            for(int jCount = iCount+1; jCount < len; jCount++) {
-                if(target == nums[iCount]+nums[jCount]) {
-                    index[0] = iCount+1;
-                    index[1] = jCount+1;
+        for(int iCount = 0; iCount < len; iCount++) {
+            if(hashNums.containsKey(nums[iCount])) {
+                if(nums[iCount]*2 == target) {
+                    index[0] = hashNums.get(nums[iCount]) + 1;
+                    index[1] = iCount + 1;
+                    return index;
+                }
+            } else {
+                hashNums.put(nums[iCount], iCount);
+            }
+        }
+
+        Set<java.util.Map.Entry<Integer,Integer>> numsSet = hashNums.entrySet();
+        Iterator<Map.Entry<Integer,Integer>> numsIterator = numsSet.iterator();
+
+        while(numsIterator.hasNext()) {
+            Map.Entry<Integer,Integer> numsEntry = numsIterator.next();
+            if(hashNums.containsKey(numsEntry.getKey()) && hashNums.containsKey(target - numsEntry.getKey())) {
+                int[] temp = new int[2];
+                temp[0] = hashNums.get(numsEntry.getKey()) + 1;
+                temp[1] = hashNums.get(target - numsEntry.getKey()) + 1;
+                if(temp[0] > temp[1]) {
+                    index[0] = temp[1];
+                    index[1] = temp[0];
+                } else {
+                    index[0] = temp[0];
+                    index[1] = temp[1];
                 }
             }
         }
+
         return index;
     }
 }
