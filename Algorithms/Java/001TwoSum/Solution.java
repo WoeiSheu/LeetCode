@@ -1,6 +1,6 @@
 /**
  * @author Hypocrisy
- * Created by Hypocrisy(许炜) on 5/19/2015.
+ * Created by Hypocrisy(虚伪) on 5/19/2015.
  */
 import java.util.*;
 
