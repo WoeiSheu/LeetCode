@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -31,56 +33,52 @@ public:
         cout << endl;
     }
 
-    void reorderList(ListNode* head) {
+    ListNode *detectCycle(ListNode *head) {
         if(head == NULL || head->next == NULL) {
+            return NULL;
+        }
+        ListNode* p = head;
+        ListNode* q = head;
+        while(q && q->next)  {
+            p = p->next;
+            q = q->next->next;
+            if(p == q) {
+                break;
+            }
+        }
+
+        ListNode* result;
+        if( q==NULL || q->next == NULL) {
+            return NULL;
+        } else {
+            p = head;
+            while(p != q) {
+                p = p->next;
+                q = q->next;
+            }
+            result = p;
+        }
+
+        return result;
+    }
+
+    void addCycle(ListNode *head) {
+        if(!head) {
             return;
         }
         ListNode* p = head;
+        ListNode* pre = head;
         ListNode* q = head->next;
-
         while(q && q->next) {
             p = p->next;
+            pre = q;
             q = q->next->next;
         }
-        q = p->next;
-        p->next = NULL;
-        p = head;
-
-        q = reverseList(q);
-
-        insertList(p,q);
-    }
-    ListNode* reverseList(ListNode* q) {        // magical syntax, why q is not modified.
-        if(q==NULL || q->next==NULL) {
-            return q;
+        if(q != NULL) {
+            q->next = p;
+        } else {
+            pre->next = p;
         }
-        ListNode* pre = q;
-        ListNode* cur = q->next;
-        ListNode* nxt = cur->next;
-        pre->next = NULL;
-        while(nxt) {
-            cur->next = pre;
-            pre = cur;
-            cur = nxt;
-            nxt = cur->next;
-        }
-        cur->next = pre;
-
-        return cur;
-    }
-    void insertList(ListNode* p, ListNode* q) {
-        ListNode* dummy = p;
-        ListNode* p_prev = p;
-        ListNode* q_prev = q;
-        while(p && q) {
-            p = p->next;
-            q = q->next;
-            p_prev->next = q_prev;
-            q_prev->next = p;
-            p_prev = p;
-            q_prev = q;
-        }
-        p = dummy;
     }
 };
 
@@ -95,9 +93,15 @@ int main() {
     Solution::printList(head);
 
     Solution* solution = new Solution();
-    solution->reorderList(head);
 
-    Solution::printList(head);
+    solution->addCycle(head);
+    ListNode* result = solution->detectCycle(head);
+
+    if(result!=NULL) {
+        cout << result->val << endl;
+    } else {
+        cout << "No Cycle." << endl;
+    }
 
     delete solution;
 
