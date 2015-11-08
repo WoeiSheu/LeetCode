@@ -25,7 +25,29 @@ public:
         int len = nums.size();
         return len;
     }
-
+    // Another better method.
+    /*
+    int removeDuplicates(vector<int>& nums) {
+        int len = nums.size();
+        if(len == 0) {
+            return 0;
+        }
+        
+        int count = 0;
+        int i = 0;
+        for(i = 0; i < len-1; i++) {
+            if(nums.at(i) == nums.at(i+1)) {
+                continue;
+            } else {
+                nums.at(count) = nums.at(i);
+                count++;
+            }
+        }
+        nums.at(count) = nums.at(i);
+        
+        return count+1;
+    }
+    */
 };
 
 int main(int argc, char** argv) {
